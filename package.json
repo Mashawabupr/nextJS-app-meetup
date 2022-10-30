@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "cross-env BROWSER=chrome next start"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1"
