@@ -1,6 +1,15 @@
 import Link from "next/link";
 import MeetupList from "../components/meetups/MeetupList";
-let HomePage = () => {
+let HomePage = (props) => {
+  return (
+    <div>
+      <h1>HomePage</h1>
+      <MeetupList meetups={props.meetups} />
+      <Link href="/meetup">meetup</Link>
+    </div>
+  );
+};
+export function getStaticProps() {
   let dummy_data = [
     {
       id: "m1",
@@ -10,12 +19,12 @@ let HomePage = () => {
       address: "toronto",
     },
   ];
-  return (
-    <div>
-      <h1>HomePage</h1>
-      <MeetupList meetups={dummy_data} />
-      <Link href="/meetup">meetup</Link>
-    </div>
-  );
-};
+  return {
+    props: {
+      meetups: dummy_data,
+    },
+    //re-generate a page  every 10 sec
+    revalidate: 10,
+  };
+}
 export default HomePage;
