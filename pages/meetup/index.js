@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Head from "next/head";
+import { Fragment } from "react";
 import NewMeetupForm from "../../components/meetups/NewMeetupForm";
 let MeetupPage = () => {
   async function handleMeetUpForm(data) {
@@ -9,11 +10,13 @@ let MeetupPage = () => {
     });
   }
   return (
-    <div>
-      <h1>MeetupPage</h1>
+    <Fragment>
+      <Head>
+        <title>Add a new meetup</title>
+        <meta name="description" content="Form for adding a new meetup" />
+      </Head>
       <NewMeetupForm onAddMeetup={handleMeetUpForm} />
-      <Link href="/">homepage</Link>
-    </div>
+    </Fragment>
   );
 };
 export default MeetupPage;

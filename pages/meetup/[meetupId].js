@@ -1,19 +1,25 @@
 import { MongoClient, ObjectId } from "mongodb";
 import Card from "../../components/ui/Card";
 import classes from "../../components/meetups/MeetupItem.module.css";
-
+import Head from "next/head";
+import { Fragment } from "react";
 let DetailPage = (props) => {
-  console.log(props);
   return (
-    <Card>
-      <div className={classes.image}>
-        <img src={props.meetup.image} alt={props.meetup.title} />
-      </div>
-      <div className={classes.content}>
-        <h3>{props.meetup.title}</h3>
-        <address>{props.meetup.address}</address>
-      </div>
-    </Card>
+    <Fragment>
+      <Head>
+        <title>{props.meetup.title}</title>
+        <meta name="description" content={props.meetup.description} />
+      </Head>
+      <Card>
+        <div className={classes.image}>
+          <img src={props.meetup.image} alt={props.meetup.title} />
+        </div>
+        <div className={classes.content}>
+          <h3>{props.meetup.title}</h3>
+          <address>{props.meetup.address}</address>
+        </div>
+      </Card>
+    </Fragment>
   );
 };
 export async function getStaticPaths() {
