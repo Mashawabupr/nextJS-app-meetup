@@ -1,11 +1,9 @@
-import Link from "next/link";
+import { MongoClient, ObjectId } from "mongodb";
 import Card from "../../components/ui/Card";
 import classes from "../../components/meetups/MeetupItem.module.css";
-import { useRouter } from "next/router";
 
 let DetailPage = (props) => {
-  let router = useRouter();
-
+  console.log(props);
   return (
     <Card>
       <div className={classes.image}>
@@ -13,36 +11,47 @@ let DetailPage = (props) => {
       </div>
       <div className={classes.content}>
         <h3>{props.meetup.title}</h3>
-        <address>{props.address}</address>
+        <address>{props.meetup.address}</address>
       </div>
     </Card>
   );
 };
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  let client = await MongoClient.connect(
+    `mongodb+srv://marikanik1999:hDZY0p5R2SVTg0f3@cluster0.tu6uqsx.mongodb.net/meetup?retryWrites=true&w=majority`
+  );
+  let db = client.db();
+  let meetupsCollection = db.collection("meetups");
+  let meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+
+  client.close();
   return {
     fallback: false,
-    paths: [
-      {
-        params: { meetupId: "m1" },
-      },
-      {
-        params: { meetupId: "m2" },
-      },
-    ],
+    paths: meetups.map((meetup) => {
+      return {
+        params: { meetupId: meetup._id.toString() },
+      };
+    }),
   };
 }
-export function getStaticProps(context) {
+export async function getStaticProps(context) {
   let id = context.params.meetupId;
-  console.log(id);
-
+  let client = await MongoClient.connect(
+    `mongodb+srv://marikanik1999:hDZY0p5R2SVTg0f3@cluster0.tu6uqsx.mongodb.net/meetup?retryWrites=true&w=majority`
+  );
+  let db = client.db();
+  let meetupsCollection = db.collection("meetups");
+  let selectedMeetup = await meetupsCollection.findOne({ _id: ObjectId(id) });
+  console.log(selectedMeetup);
+  client.close();
   return {
     props: {
       meetup: {
-        id,
-        image:
-          "https://www.pinkvilla.com/imageresize/bts_jungkook_be_cp_main_0.jpg?width=752&t=pvorg",
-        title: "meetup 1",
-        address: "toronto",
+        id: selectedMeetup._id.toString(),
+        title: selectedMeetup.title,
+        image: selectedMeetup.image,
+        address: selectedMeetup.address,
+        description: selectedMeetup.description,
       },
     },
   };
