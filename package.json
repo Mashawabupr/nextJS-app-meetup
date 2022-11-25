@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "cross-env BROWSER=chrome next start"
+    "start": "next start"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
